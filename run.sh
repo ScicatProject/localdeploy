@@ -43,15 +43,15 @@ for file in $NS_DIR; do
     kubectl create -f $file
     export LOCAL_ENV="$ns"
     kubectl apply -f mongo.yaml
-    helm install stable/mongodb --version 0.4.15 --namespace $LOCAL_ENV --name local-mongodb
+    helm install stable/mongodb --namespace $LOCAL_ENV --name local-mongodb
     if [[ "KAFKA" -eq "1" ]]; then
         
         helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
         helm install --name local-kafka incubator/kafka --namespace $LOCAL_ENV
     fi
     kubectl apply -f rabbit.yaml
-    helm install stable/rabbitmq --version 0.6.3 --namespace $LOCAL_ENV --name local-rabbit --set rabbitmqUsername=admin,rabbitmqPassword=admin
-    helm install services/node-red --namespace dev --name local-node
+    helm install stable/rabbitmq --namespace $LOCAL_ENV --name local-rabbit --set rabbitmqUsername=admin,rabbitmqPassword=admin
+    helm install stable/node-red --namespace dev --name local-node
 done
 ./secret.sh
 
